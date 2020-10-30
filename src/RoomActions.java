@@ -98,29 +98,44 @@ public class RoomActions {
                 return Arrays.toString(roomsArray).replace("[", "").replace("]", "");
         }
 
-        // Make a conditional to run through each room and match it to the input. If
-        // they match, then return the items in the room
-        // Iterate through each "room" item and compare against user input
         public String getItemsShort(String room) {
                 String returnCase = "An error has occurred!";
                 room = room.toLowerCase();
-
                 for (int i = 0; i < rooms.size(); i++) {
                         String roomObj = rooms.get(i).getRoomName().toLowerCase();
-                        boolean isEqual = (roomObj.equals(room));
                         if (roomObj.equals(room)) {
+                                if (rooms.get(i).getItemNames().length == 0) {
+                                        returnCase = "This room has no items!";
+                                        return returnCase;
+                                }
                                 returnCase = Arrays.toString(rooms.get(i).getItemNames());
                                 return returnCase;
-                        } else {
-                                returnCase = "There are no items in this room!";
                         }
                 }
                 return returnCase;
         }
 
+        // Add a conditional for if the room has no objects
+        public Object getItemsLong(String room) {
+                room = room.toLowerCase();
+                List<String> itemPairs = new ArrayList<>();
+                for (int i = 0; i < rooms.size(); i++) {
+                        String roomObj = rooms.get(i).getRoomName().toLowerCase();
+                        if (roomObj.equals(room)) {
+                                for (String itemName : rooms.get(i).getItemNames()) {
+                                        itemPairs.add("\nItem: " + itemName + "\nDescription: "
+                                                        + rooms.get(i).getItemDesc(itemName) + "\n");
+                                }
+                                return itemPairs.toString().replace("[", "").replace("]", "").replace(", ", "");
+                        }
+
+                }
+                return "An unexpected error has occured!";
+        }
+
         public static void main(String[] args) {
                 RoomActions test = new RoomActions();
-                System.out.println(test.getItemsShort("pantry"));
+                System.out.println(test.getItemsLong("entrance"));
         }
 
 }

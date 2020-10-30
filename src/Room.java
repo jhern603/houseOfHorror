@@ -45,6 +45,10 @@ public class Room {
 
         return itemsArray;
     }
+    
+    public String getItemDesc(String key) {
+        return this.itemsInRoom.get(key);
+    }
 
     public HashMap<String, String> getItemPairs() {
         return itemsInRoom;
