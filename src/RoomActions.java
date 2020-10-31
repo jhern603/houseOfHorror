@@ -98,7 +98,7 @@ public class RoomActions {
                 return Arrays.toString(roomsArray).replace("[", "").replace("]", "");
         }
 
-        public String getItemsShort(String room) {
+        public String getAvailableItems(String room) {
                 String returnCase = "An error has occurred!";
                 room = room.toLowerCase();
                 for (int i = 0; i < rooms.size(); i++) {
@@ -115,27 +115,31 @@ public class RoomActions {
                 return returnCase;
         }
 
-        // Add a conditional for if the room has no objects
         public Object getItemsLong(String room) {
                 room = room.toLowerCase();
                 List<String> itemPairs = new ArrayList<>();
                 for (int i = 0; i < rooms.size(); i++) {
                         String roomObj = rooms.get(i).getRoomName().toLowerCase();
                         if (roomObj.equals(room)) {
-                                for (String itemName : rooms.get(i).getItemNames()) {
-                                        itemPairs.add("\nItem: " + itemName + "\nDescription: "
-                                                        + rooms.get(i).getItemDesc(itemName) + "\n");
+                                Room currentRoom = rooms.get(i);
+                                if (currentRoom.getItemNames().length != 0) {
+                                        for (String itemName : rooms.get(i).getItemNames()) {
+                                                itemPairs.add("\nItem: " + itemName + "\nDescription: "
+                                                                + rooms.get(i).getItemDesc(itemName) + "\n");
+                                        }
+                                        return itemPairs.toString().replace("[", "").replace("]", "").replace(", ", "");
+                                } else {
+                                        return "This room has no items!";
                                 }
-                                return itemPairs.toString().replace("[", "").replace("]", "").replace(", ", "");
                         }
-
                 }
-                return "An unexpected error has occured!";
+
+                return "That room doesn't exist!";
         }
 
         public static void main(String[] args) {
                 RoomActions test = new RoomActions();
-                System.out.println(test.getItemsLong("entrance"));
+                System.out.println(test.getItemsLong("master bathroom"));
         }
 
 }
