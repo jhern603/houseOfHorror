@@ -7,6 +7,18 @@ public class Room {
     private List<String> connectedRooms = new ArrayList<>();
     private HashMap<String, String> itemsInRoom = new HashMap<>();
 
+    public Room() {
+        this.roomName = "An exception has occurred!";
+        this.connectedRooms.add("None");
+        this.visitedCounter = 0;
+        this.visited = false;
+    }
+    public Room(String name) {
+        this.roomName = name;
+        this.connectedRooms.add("There are no connected rooms.");
+        this.visitedCounter = 0;
+        this.visited = false;
+    }
     public Room(String name, String[] connectedTo) {
         this.roomName = name;
         this.connectedRooms = Arrays.asList(connectedTo);

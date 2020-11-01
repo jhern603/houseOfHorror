@@ -1,43 +1,47 @@
 import java.util.*;
 
 public class RoomActions {
-        // Use this class to visit rooms which will have to check if the room has a
-        // connected room and if the user is in the room
         private ArrayList<Room> rooms = new ArrayList<>();
-        private int amountRooms = 12;
+        private int amountRooms = 13;
+        private int j;
 
         public RoomActions() {
                 generateRooms();
         }
 
         public void generateRooms() {
-                Room entranceRoom, livingRoom, bathroom, diningRoom, kitchen, pantry, upStairs, bed2, upstairsBath,
-                                masterBed, masterBath, bed1;
+                Room myError, entranceRoom, livingRoom, bathroom, diningRoom, kitchen, pantry, upStairs, bed2,
+                                upstairsBath, masterBed, masterBath, bed1, myRoom;
 
                 // Create room connections
-                String[] noConnections = { "There are no connected rooms." };
-                String[] connectedRoomsEntrance = { "Stairs", "Living Room", "Dining Room" };
-                String[] connectedRoomsLR = { "Bathroom" };
-                String[] connectedRoomsDining = { "Kitchen" };
-                String[] connectedRoomsKitchen = { "Pantry" };
-                String[] connectedRoomsUpStairs = { "Master Bedroom", "Bedroom 2", "Bedroom 1" };
-                String[] connectedRoomsBedroom1 = { "Upstairs Bathroom" };
-                String[] connectedRoomsBedroom2 = { "Upstairs Bathroom" };
-                String[] connectedRoomsMasterBed = { "master bathroom" };
+                String[] connectedRoomsEntrance = { "stairs", "living room", "dining room" };
+                String[] connectedRoomsLR = { "bathroom", "entrance" };
+                String[] connectedRoomsDining = { "kitchen", "entrance" };
+                String[] connectedRoomsKitchen = { "pantry", "dining room" };
+                String[] connectedRoomsUpStairs = { "master bedroom", "bedroom 2", "bedroom 1", "entrance" };
+                String[] connectedRoomsBedroom = { "upstairs bathroom", "stairs" };
+                String[] connectedRoomsUpStairsBath = { "bedroom 1", "bedroom 2" };
+                String[] connectedRoomsMasterBed = { "master bathroom", "stairs" };
+                String[] connectedRoomsBathroom = { "living room" };
+                String[] connectedRoomsPantry = { "kitchen" };
+                String[] connectedRoomsMasterBath = { "master bedroom" };
+                String[] connectedRoomsMyRoom = {"entrance"};
 
                 // Create rooms
+                myError = new Room();
                 entranceRoom = new Room("Entrance", connectedRoomsEntrance);
                 livingRoom = new Room("Living Room", connectedRoomsLR);
-                bathroom = new Room("bathroom", noConnections);
+                bathroom = new Room("bathroom", connectedRoomsBathroom);
                 diningRoom = new Room("Dining Room", connectedRoomsDining);
                 kitchen = new Room("Kitchen", connectedRoomsKitchen);
-                pantry = new Room("Pantry", noConnections);
-                upStairs = new Room("Up Stairs", connectedRoomsUpStairs);
-                bed1 = new Room("Bedroom 1", connectedRoomsBedroom1);
-                bed2 = new Room("Bedroom 2", connectedRoomsBedroom2);
-                upstairsBath = new Room("Upstairs bathroom", noConnections);
+                pantry = new Room("Pantry", connectedRoomsPantry);
+                upStairs = new Room("Stairs", connectedRoomsUpStairs);
+                bed1 = new Room("Bedroom 1", connectedRoomsBedroom);
+                bed2 = new Room("Bedroom 2", connectedRoomsBedroom);
+                upstairsBath = new Room("Upstairs bathroom", connectedRoomsUpStairsBath);
                 masterBed = new Room("Master Bedroom", connectedRoomsMasterBed);
-                masterBath = new Room("Master bathroom", noConnections);
+                masterBath = new Room("Master bathroom", connectedRoomsMasterBath);
+                myRoom = new Room("My room", connectedRoomsMyRoom);
 
                 // Add items to room
                 livingRoom.addItem("Chest", "Ghost escapes and scares you to death");
@@ -75,6 +79,7 @@ public class RoomActions {
                                 "the bathroom suddenly steams up and you feel fingers touching the back of your neck");
 
                 // Add rooms to collection
+                rooms.add(myError);
                 rooms.add(entranceRoom);
                 rooms.add(livingRoom);
                 rooms.add(bathroom);
@@ -89,57 +94,80 @@ public class RoomActions {
                 rooms.add(bed1);
         }
 
-        // Do something with the enhanced For loop
-        public String getRooms() {
+        public String getRoomList() {
                 String[] roomsArray = new String[amountRooms];
                 for (int i = 0; i < rooms.size(); i++) {
                         roomsArray[i] = rooms.get(i).getRoomName();
                 }
-                return Arrays.toString(roomsArray).replace("[", "").replace("]", "");
+                return returnArrAsString(roomsArray);
         }
 
         public String getAvailableItems(String room) {
                 String returnCase = "An error has occurred!";
                 room = room.toLowerCase();
-                for (int i = 0; i < rooms.size(); i++) {
-                        String roomObj = rooms.get(i).getRoomName().toLowerCase();
-                        if (roomObj.equals(room)) {
-                                if (rooms.get(i).getItemNames().length == 0) {
-                                        returnCase = "This room has no items!";
-                                        return returnCase;
-                                }
-                                returnCase = Arrays.toString(rooms.get(i).getItemNames());
-                                return returnCase;
-                        }
+                if (getRoomProperties(room).getItemNames().length == 0) {
+                        returnCase = "This room has no items!";
+                        return returnCase;
+                } else if (getRoomProperties(room).getItemNames().length != 0) {
+                        returnCase = returnArrAsString(getRoomProperties(room).getItemNames());
                 }
                 return returnCase;
+        }
+
+        public String getItemDesc(Room currentRoom, String item) {
+                return currentRoom.getItemDesc(item);
         }
 
         public Object getItemsLong(String room) {
                 room = room.toLowerCase();
                 List<String> itemPairs = new ArrayList<>();
-                for (int i = 0; i < rooms.size(); i++) {
-                        String roomObj = rooms.get(i).getRoomName().toLowerCase();
-                        if (roomObj.equals(room)) {
-                                Room currentRoom = rooms.get(i);
-                                if (currentRoom.getItemNames().length != 0) {
-                                        for (String itemName : rooms.get(i).getItemNames()) {
-                                                itemPairs.add("\nItem: " + itemName + "\nDescription: "
-                                                                + rooms.get(i).getItemDesc(itemName) + "\n");
-                                        }
-                                        return itemPairs.toString().replace("[", "").replace("]", "").replace(", ", "");
-                                } else {
-                                        return "This room has no items!";
-                                }
+                if (getRoomProperties(room).getItemNames().length != 0) {
+                        for (String itemName : getRoomProperties(room).getItemNames()) {
+                                itemPairs.add("\nItem: " + itemName + "\nDescription: "
+                                                + getRoomProperties(room).getItemDesc(itemName) + "\n");
                         }
+                        return returnObjAsString(itemPairs).replace(", ", "");
+                } else {
+                        return "This room has no items!";
                 }
 
-                return "That room doesn't exist!";
         }
 
-        public static void main(String[] args) {
-                RoomActions test = new RoomActions();
-                System.out.println(test.getItemsLong("master bathroom"));
+        public boolean canMoveInto(String currentRoom, String attemptedRoom) {
+                currentRoom = currentRoom.toLowerCase();
+                attemptedRoom = attemptedRoom.toLowerCase();
+                boolean status = false;
+                for (j = 0; j < getRoomProperties(currentRoom).getConnectedRooms().size(); j++) {
+                        if (getRoomProperties(currentRoom).getConnectedRooms().get(j).contains(attemptedRoom)) {
+                                status = true;
+                        }
+                }
+                return status;
+
+        }
+
+        public String getConnections(String currentRoom) {
+                return returnObjAsString(getRoomProperties(currentRoom).getConnectedRooms());
+        }
+
+        public Room getRoomProperties(String attemptedRoom) {
+                attemptedRoom = attemptedRoom.toLowerCase();
+                Room room = rooms.get(0);
+                for (int i = 0; i < rooms.size(); i++) {
+                        String roomObj = rooms.get(i).getRoomName().toLowerCase();
+                        if (roomObj.equals(attemptedRoom)) {
+                                room = rooms.get(i);
+                        }
+                }
+                return room;
+        }
+
+        public String returnObjAsString(Object method) {
+                return method.toString().replace("[", "").replace("]", "");
+        }
+
+        public String returnArrAsString(Object[] array) {
+                return Arrays.toString(array).replace("[", "").replace("]", "");
         }
 
 }
