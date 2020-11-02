@@ -2,43 +2,27 @@ import java.util.*;
 
 public class Room {
     private String roomName;
-    private boolean visited;
-    private int visitedCounter;
     private List<String> connectedRooms = new ArrayList<>();
     private HashMap<String, String> itemsInRoom = new HashMap<>();
 
     public Room() {
         this.roomName = "An exception has occurred!";
         this.connectedRooms.add("None");
-        this.visitedCounter = 0;
-        this.visited = false;
     }
+
     public Room(String name) {
         this.roomName = name;
         this.connectedRooms.add("There are no connected rooms.");
-        this.visitedCounter = 0;
-        this.visited = false;
     }
+
     public Room(String name, String[] connectedTo) {
         this.roomName = name;
         this.connectedRooms = Arrays.asList(connectedTo);
-        this.visitedCounter = 0;
-        this.visited = false;
-    }
-
-    public int setVisited() {
-        if (this.visited) {
-            this.visitedCounter++;
-            return 0;
-        } else {
-            this.visited = true; 
-            this.visitedCounter++;
-            return 1;
-        }
     }
 
     public void addItem(String name, String description) {
         this.itemsInRoom.put(name.toLowerCase(), description.toLowerCase());
+        System.out.println("Room.addItem: " + name + " added.");
     }
 
     public List<String> getConnectedRooms() {
@@ -54,28 +38,14 @@ public class Room {
         Set<String> itemsSet = this.itemsInRoom.keySet();
         String[] itemsArray = new String[itemsSet.size()];
         itemsArray = itemsSet.toArray(itemsArray);
+        System.out.println("Room.getItemNames:" + Arrays.toString(itemsArray));
 
         return itemsArray;
     }
-    
+
     public String getItemDesc(String key) {
+        System.out.println("Room.getItemDesc:" + key + "'s Description returned");
         return this.itemsInRoom.get(key);
-    }
-
-    public HashMap<String, String> getItemPairs() {
-        return itemsInRoom;
-    }
-
-    public int getVisitedCount() {
-        return this.visitedCounter;
-    }
-
-    public String returnObjAsString(Object method) {
-        return method.toString().replace("[", "").replace("]", "");
-    }
-    
-    public String returnArrAsString(Object[] array) {
-        return Arrays.toString(array).replace("[", "").replace("]", "");
     }
 
 }

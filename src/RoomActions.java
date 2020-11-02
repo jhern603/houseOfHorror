@@ -11,7 +11,7 @@ public class RoomActions {
 
         public void generateRooms() {
                 Room myError, entranceRoom, livingRoom, bathroom, diningRoom, kitchen, pantry, upStairs, bed2,
-                                upstairsBath, masterBed, masterBath, bed1, myRoom;
+                                upstairsBath, masterBed, masterBath, bed1;
 
                 // Create room connections
                 String[] connectedRoomsEntrance = { "stairs", "living room", "dining room" };
@@ -25,7 +25,6 @@ public class RoomActions {
                 String[] connectedRoomsBathroom = { "living room" };
                 String[] connectedRoomsPantry = { "kitchen" };
                 String[] connectedRoomsMasterBath = { "master bedroom" };
-                String[] connectedRoomsMyRoom = {"entrance"};
 
                 // Create rooms
                 myError = new Room();
@@ -41,7 +40,6 @@ public class RoomActions {
                 upstairsBath = new Room("Upstairs bathroom", connectedRoomsUpStairsBath);
                 masterBed = new Room("Master Bedroom", connectedRoomsMasterBed);
                 masterBath = new Room("Master bathroom", connectedRoomsMasterBath);
-                myRoom = new Room("My room", connectedRoomsMyRoom);
 
                 // Add items to room
                 livingRoom.addItem("Chest", "Ghost escapes and scares you to death");
@@ -92,6 +90,8 @@ public class RoomActions {
                 rooms.add(masterBed);
                 rooms.add(masterBath);
                 rooms.add(bed1);
+
+                System.out.println("RoomActions.generateRooms: Rooms generated");
         }
 
         public String getRoomList() {
@@ -136,8 +136,9 @@ public class RoomActions {
         public boolean canMoveInto(String currentRoom, String attemptedRoom) {
                 currentRoom = currentRoom.toLowerCase();
                 attemptedRoom = attemptedRoom.toLowerCase();
+                int roomSize = getRoomProperties(currentRoom).getConnectedRooms().size();
                 boolean status = false;
-                for (j = 0; j < getRoomProperties(currentRoom).getConnectedRooms().size(); j++) {
+                for (j = 0; j < roomSize; j++) {
                         if (getRoomProperties(currentRoom).getConnectedRooms().get(j).contains(attemptedRoom)) {
                                 status = true;
                         }
