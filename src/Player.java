@@ -1,3 +1,15 @@
+
+//********************************************************************************
+// Name:  Jose Hernandez
+// FIU email: Jhern603@fiu.edu
+// PantherID:  5712864
+// CLASS: COP 2210 – 2020
+// ASSIGNMENT # 3
+// DATE: 04NOV20
+//
+// I hereby swear and affirm that this work is solely my own, and not the work
+// or the derivative of the work of someone else.
+//********************************************************************************
 public class Player {
     // TODO: viewing inventory
     private String playerName;
@@ -31,10 +43,11 @@ public class Player {
     public String pickupItem(String item){
         String returnStatus = "Something went wrong!";
         for(int i = 0; i < invContents.length; i++){
-            if(invContents[i] == "" || invContents[i].isEmpty()){
+            if(invContents[i] == null || invContents[i].isEmpty()){
                 invContents[i] = item;
                 returnStatus = "You have picked up: " + item;
                 System.out.println("Player.pickupItem: "+ item +" was picked up.");
+                return returnStatus;
             }else{
                 System.err.println("Player.pickupItem: Item was not picked up.");
                 returnStatus = "You weren't able to pick that up!";

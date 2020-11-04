@@ -1,3 +1,15 @@
+
+//********************************************************************************
+// Name:  Jose Hernandez
+// FIU email: Jhern603@fiu.edu
+// PantherID:  5712864
+// CLASS: COP 2210 – 2020
+// ASSIGNMENT # 3
+// DATE: 04NOV20
+//
+// I hereby swear and affirm that this work is solely my own, and not the work
+// or the derivative of the work of someone else.
+//********************************************************************************
 import javax.swing.*;
 import java.util.*;
 
@@ -28,6 +40,7 @@ public class Game {
                             player.house.getAvailableItems(player.getLocation())).toString();
                     if (!itemChoice.equals("OK")) {
                         output(player.inspectItem(itemChoice));
+                        output(player.pickupItem(itemChoice));
                         System.exit(1);
                     }
                 }
