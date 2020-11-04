@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.util.*;
 
-public class Game {
+public class Game { 
 
     public void play() {
         String begin = input("Welcome to the house of horrors!\nAre you willing to enter?").toLowerCase();
@@ -13,7 +13,7 @@ public class Game {
 
             do {
                 map(player.getLocation());
-                String userInput = options("You are currently at the: " + player.getLocation().toUpperCase() + ".\nWhere would you like to go?", player.house.getConnectionsAsArr(player.getLocation()).toArray()).toString();
+                String userInput = options("You are currently at the: " + player.getLocation().toUpperCase() + ".\nWhere would you like to go?", player.house.getConnectionsAsList(player.getLocation()).toArray()).toString();
 
                 output(player.moveTo(userInput));
                 
@@ -65,12 +65,12 @@ public class Game {
         filePaths.put("Dining Room", "src\\media\\img\\map\\1dining.png");
         filePaths.put("Kitchen", "src\\media\\img\\map\\1kitchen.png");
         filePaths.put("Pantry", "src\\media\\img\\map\\1pantry.png");
-        // filePaths.put("Stairs");
-        // filePaths.put("Bedroom 1");
-        // filePaths.put("Bedroom 2");
-        // filePaths.put("Upstairs bathroom");
-        // filePaths.put("Master Bedroom");
-        // filePaths.put("Master bathroom");
+        filePaths.put("Stairs", "src\\media\\img\\map\\2stairs.png");
+        filePaths.put("Bedroom 1", "src\\media\\img\\map\\2bedroom1.png");
+        filePaths.put("Bedroom 2", "src\\media\\img\\map\\2bedroom2.png");
+        filePaths.put("Upstairs bathroom", "src\\media\\img\\map\\2bathroom.png");
+        filePaths.put("Master Bedroom", "src\\media\\img\\map\\2masterbed.png");
+        filePaths.put("Master bathroom", "src\\media\\img\\map\\2masterbath.png");
         ImageIcon mapLocation = new ImageIcon(filePaths.get(location));
         JOptionPane.showMessageDialog(null, "", null, JOptionPane.DEFAULT_OPTION, mapLocation);
     }

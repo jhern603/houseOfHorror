@@ -126,7 +126,7 @@ public class RoomActions {
 
         }
 
-        public List<String> getConnectionsAsArr(String currentRoom) {
+        public List<String> getConnectionsAsList(String currentRoom) {
                 return returnStringAsRoom(currentRoom).getConnectedRooms();
         }
 
