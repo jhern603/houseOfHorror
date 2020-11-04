@@ -2,8 +2,8 @@ import java.util.*;
 
 public class RoomActions {
         private ArrayList<Room> rooms = new ArrayList<>();
-        private int amountRooms = 13;
-        private int j;
+        private final int AMOUNTROOMS = 13;
+        private int counter;
 
         public RoomActions() {
                 generateRooms();
@@ -13,15 +13,16 @@ public class RoomActions {
                 Room myError, entranceRoom, livingRoom, bathroom, diningRoom, kitchen, pantry, upStairs, bed2,
                                 upstairsBath, masterBed, masterBath, bed1;
 
-                // Create room connections
+                // Create room connections (also used for back tracking, which is currently
+                // disabled)
                 String[] connectedRoomsEntrance = { "stairs", "living room", "dining room" };
-                String[] connectedRoomsLR = { "bathroom", "entrance" };
-                String[] connectedRoomsDining = { "kitchen", "entrance" };
-                String[] connectedRoomsKitchen = { "pantry", "dining room" };
-                String[] connectedRoomsUpStairs = { "master bedroom", "bedroom 2", "bedroom 1", "entrance" };
-                String[] connectedRoomsBedroom = { "upstairs bathroom", "stairs" };
+                String[] connectedRoomsLR = { "bathroom" };
+                String[] connectedRoomsDining = { "kitchen" };
+                String[] connectedRoomsKitchen = { "pantry" };
+                String[] connectedRoomsUpStairs = { "master bedroom", "bedroom 2", "bedroom 1" };
+                String[] connectedRoomsBedroom = { "upstairs bathroom" };
                 String[] connectedRoomsUpStairsBath = { "bedroom 1", "bedroom 2" };
-                String[] connectedRoomsMasterBed = { "master bathroom", "stairs" };
+                String[] connectedRoomsMasterBed = { "master bathroom" };
                 String[] connectedRoomsBathroom = { "living room" };
                 String[] connectedRoomsPantry = { "kitchen" };
                 String[] connectedRoomsMasterBath = { "master bedroom" };
@@ -30,16 +31,16 @@ public class RoomActions {
                 myError = new Room();
                 entranceRoom = new Room("Entrance", connectedRoomsEntrance);
                 livingRoom = new Room("Living Room", connectedRoomsLR);
-                bathroom = new Room("bathroom", connectedRoomsBathroom);
+                bathroom = new Room("bathroom");
                 diningRoom = new Room("Dining Room", connectedRoomsDining);
                 kitchen = new Room("Kitchen", connectedRoomsKitchen);
-                pantry = new Room("Pantry", connectedRoomsPantry);
+                pantry = new Room("Pantry");
                 upStairs = new Room("Stairs", connectedRoomsUpStairs);
                 bed1 = new Room("Bedroom 1", connectedRoomsBedroom);
                 bed2 = new Room("Bedroom 2", connectedRoomsBedroom);
-                upstairsBath = new Room("Upstairs bathroom", connectedRoomsUpStairsBath);
+                upstairsBath = new Room("Upstairs bathroom");
                 masterBed = new Room("Master Bedroom", connectedRoomsMasterBed);
-                masterBath = new Room("Master bathroom", connectedRoomsMasterBath);
+                masterBath = new Room("Master bathroom");
 
                 // Add items to room
                 livingRoom.addItem("Chest", "Ghost escapes and scares you to death");
@@ -95,51 +96,29 @@ public class RoomActions {
         }
 
         public String getRoomList() {
-                String[] roomsArray = new String[amountRooms];
+                String[] roomsArray = new String[AMOUNTROOMS];
                 for (int i = 0; i < rooms.size(); i++) {
                         roomsArray[i] = rooms.get(i).getRoomName();
                 }
                 return returnArrAsString(roomsArray);
         }
 
-        public String getAvailableItems(String room) {
-                String returnCase = "An error has occurred!";
+        public String[] getAvailableItems(String room) {
                 room = room.toLowerCase();
-                if (getRoomProperties(room).getItemNames().length == 0) {
-                        returnCase = "This room has no items!";
-                        return returnCase;
-                } else if (getRoomProperties(room).getItemNames().length != 0) {
-                        returnCase = returnArrAsString(getRoomProperties(room).getItemNames());
-                }
-                return returnCase;
+                return returnStringAsRoom(room).getItemNames();
         }
 
         public String getItemDesc(Room currentRoom, String item) {
                 return currentRoom.getItemDesc(item);
         }
 
-        public Object getItemsLong(String room) {
-                room = room.toLowerCase();
-                List<String> itemPairs = new ArrayList<>();
-                if (getRoomProperties(room).getItemNames().length != 0) {
-                        for (String itemName : getRoomProperties(room).getItemNames()) {
-                                itemPairs.add("\nItem: " + itemName + "\nDescription: "
-                                                + getRoomProperties(room).getItemDesc(itemName) + "\n");
-                        }
-                        return returnObjAsString(itemPairs).replace(", ", "");
-                } else {
-                        return "This room has no items!";
-                }
-
-        }
-
-        public boolean canMoveInto(String currentRoom, String attemptedRoom) {
+        public boolean canMoveInto(String currentRoom, String nextRoom) {
                 currentRoom = currentRoom.toLowerCase();
-                attemptedRoom = attemptedRoom.toLowerCase();
-                int roomSize = getRoomProperties(currentRoom).getConnectedRooms().size();
+                nextRoom = nextRoom.toLowerCase();
+                int numberConnectedRooms = returnStringAsRoom(currentRoom).getConnectedRooms().size();
                 boolean status = false;
-                for (j = 0; j < roomSize; j++) {
-                        if (getRoomProperties(currentRoom).getConnectedRooms().get(j).contains(attemptedRoom)) {
+                for (counter = 0; counter < numberConnectedRooms; counter++) {
+                        if (returnStringAsRoom(currentRoom).getConnectedRooms().get(counter).contains(nextRoom)) {
                                 status = true;
                         }
                 }
@@ -147,11 +126,15 @@ public class RoomActions {
 
         }
 
-        public String getConnections(String currentRoom) {
-                return returnObjAsString(getRoomProperties(currentRoom).getConnectedRooms());
+        public List<String> getConnectionsAsArr(String currentRoom) {
+                return returnStringAsRoom(currentRoom).getConnectedRooms();
         }
 
-        public Room getRoomProperties(String attemptedRoom) {
+        public String getConnections(String currentRoom) {
+                return returnObjAsString(returnStringAsRoom(currentRoom).getConnectedRooms());
+        }
+
+        public Room returnStringAsRoom(String attemptedRoom) {
                 attemptedRoom = attemptedRoom.toLowerCase();
                 Room room = rooms.get(0);
                 for (int i = 0; i < rooms.size(); i++) {

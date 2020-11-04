@@ -1,11 +1,10 @@
 import javax.swing.*;
+import java.util.*;
 
 public class Game {
 
     public void play() {
-        Commands cmd = new Commands();
         String begin = input("Welcome to the house of horrors!\nAre you willing to enter?").toLowerCase();
-
         if (begin.contains("y")) {
             String playerName = input("What is your name?");
             Player player = new Player(playerName);
@@ -13,46 +12,68 @@ public class Game {
             output("You enter a suspcious looking house and find that the door shuts behind you.\n You try to open the door but it looks like it locked itself. Your only option is to traverse the house and find your way out.");
 
             do {
-                String userInput = input("You are currently at the: " + player.getLocation().toUpperCase()
-                        + ".\nYou can move into the following rooms from here: " + player.connectedRooms().toUpperCase()
-                        + ".\nWhat would you like to do?(Your available commands are: " + cmd.getCommandList() + ")");
+                map(player.getLocation());
+                String userInput = options("You are currently at the: " + player.getLocation().toUpperCase() + ".\nWhere would you like to go?", player.house.getConnectionsAsArr(player.getLocation()).toArray()).toString();
 
-                String[] inputToArray = userInput.split(" ");
-                String userCommand = inputToArray[0];
-                String userWord = (inputToArray.length <= 2) ? inputToArray[1]
-                        : ((inputToArray.length <= 3) ? inputToArray[1] + " " + inputToArray[2]
-                                : inputToArray[1] + " " + inputToArray[2] + " " + inputToArray[3]);
+                output(player.moveTo(userInput));
+                
+                if (userInput.equals("stairs")) {
+                    output("The rickety stairs collapse as you go up each step, leaving you unable to go back down.");
+                } else {
+                    output("You enter the room. The door slams shut door behind you.\n You try to open the door but doesn't budge.");
+                }
 
-                if (cmd.command(userCommand).equals("move")) {
-                    output(player.moveTo(userWord));
-                    output("You have found the following items in the room: "
-                            + player.house.getAvailableItems(player.getLocation()).toUpperCase());
-                } else if (cmd.command(userCommand).equals("quit")) {
-                    output("You really thought you can quit just like that?\nYou entered this house, now you have to explore it.");
-
-                } else if (cmd.command(userCommand).equals("inspect")) {
-                    output(player.inspectItem(userWord));
-                    String pickup = input("Would you like to pick this item up?");
-                    if (pickup.contains("y")) {
-                        output(player.pickupItem(userWord));
+                if (player.house.getAvailableItems(player.getLocation()).length != 0) {
+                    String itemChoice = options("You have found the following items in the room (Click to inspect): ",
+                            player.house.getAvailableItems(player.getLocation())).toString();
+                    if (!itemChoice.equals("OK")) {
+                        output(player.inspectItem(itemChoice));
                         System.exit(1);
                     }
-                } else {
-                    output("That is not a valid command!");
                 }
+
             } while (true);
-        } else {
+        } else
+
+        {
             output("That's alright, maybe next time.");
-            System.exit(-1);
+            System.exit(1);
         }
 
     }
 
-    public static String input(String msg) {
+    private static String input(String msg) {
         return JOptionPane.showInputDialog(null, msg, "Horrors of House", 1);
     }
 
-    public static void output(String msg) {
+    private static void output(String msg) {
         JOptionPane.showMessageDialog(null, msg, "Horrors of House", 1);
     }
+
+    private static Object options(String msg, Object[] userOptions) {
+        int option = JOptionPane.showOptionDialog(null, msg, "Horrors of House", JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE, null, userOptions, userOptions[0]);
+        return userOptions[option];
+    }
+
+    // Use current locatino to pull the map for the user
+    private static void map(String location) {
+        HashMap<String, String> filePaths = new HashMap<>();
+        filePaths.put("Entrance", "src\\media\\img\\map\\1entrance.png");
+        filePaths.put("Living Room", "src\\media\\img\\map\\1lr.png");
+        filePaths.put("bathroom", "src\\media\\img\\map\\1bathroom.png");
+        filePaths.put("Dining Room", "src\\media\\img\\map\\1dining.png");
+        filePaths.put("Kitchen", "src\\media\\img\\map\\1kitchen.png");
+        filePaths.put("Pantry", "src\\media\\img\\map\\1pantry.png");
+        // filePaths.put("Stairs");
+        // filePaths.put("Bedroom 1");
+        // filePaths.put("Bedroom 2");
+        // filePaths.put("Upstairs bathroom");
+        // filePaths.put("Master Bedroom");
+        // filePaths.put("Master bathroom");
+        ImageIcon mapLocation = new ImageIcon(filePaths.get(location));
+        JOptionPane.showMessageDialog(null, "", null, JOptionPane.DEFAULT_OPTION, mapLocation);
+    }
+
+
 }

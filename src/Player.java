@@ -1,7 +1,5 @@
 public class Player {
     // TODO: viewing inventory
-    // BUG: Kicks player to exception if attempting to move to a non-existent room from not entrance
-    // quit command does not work
     private String playerName;
     private final Integer INV_SIZE = 4;
     private String[] invContents = new String[INV_SIZE];
@@ -10,7 +8,7 @@ public class Player {
 
     public Player(String name) {
         playerName = name;
-        currentRoom = house.getRoomProperties("entrance");
+        currentRoom = house.returnStringAsRoom("entrance");
         invContents[0] = null;
         System.out.println("Player: "+name+" created.");
     }
@@ -33,7 +31,7 @@ public class Player {
     public String pickupItem(String item){
         String returnStatus = "Something went wrong!";
         for(int i = 0; i < invContents.length; i++){
-            if(invContents[i] == "" || invContents[i] == null){
+            if(invContents[i] == "" || invContents[i].isEmpty()){
                 invContents[i] = item;
                 returnStatus = "You have picked up: " + item;
                 System.out.println("Player.pickupItem: "+ item +" was picked up.");
@@ -47,7 +45,7 @@ public class Player {
 
     public String moveTo(String toVisit) {
         if (house.canMoveInto(currentRoom.getRoomName(), toVisit)) {
-            currentRoom = house.getRoomProperties(toVisit);
+            currentRoom = house.returnStringAsRoom(toVisit);
             System.out.println("Player.moveTo: "+ currentRoom.getRoomName());
             return "You have moved into the " + currentRoom.getRoomName();
         }
@@ -56,7 +54,7 @@ public class Player {
     }
 
     public String inspectItem(String itemToInspect) {
-        for (String item : house.getRoomProperties(currentRoom.getRoomName()).getItemNames()) {
+        for (String item : house.returnStringAsRoom(currentRoom.getRoomName()).getItemNames()) {
             if (item.equals(itemToInspect)) {
                 System.out.println("Player.getItemDesc: " + itemToInspect + "'s description returned");
                 return house.getItemDesc(currentRoom, itemToInspect);
@@ -66,34 +64,4 @@ public class Player {
         return "That is not an item in the room!";
     }
 
-    // Performs linear search of the array to check if value is in any index of
-    // array
-    public boolean arrayContains(String value) {
-        boolean status = false;
-        for (int i = 0; i <= this.invContents.length; i++) {
-            if (this.invContents[i].contains(value)) {
-                status = true;
-            } else {
-                status = false;
-            }
-        }
-        return status;
-    }
-
-    // Performs linear search of the array to return index value of array
-    public int indexOf(String value) {
-        if (this.invContents == null) {
-            return -1;
-        }
-        int len = this.invContents.length;
-        int i = 0;
-        while (i < len) {
-            if (invContents[i].equals(value)) {
-                return i;
-            } else {
-                i++;
-            }
-        }
-        return -1;
-    }
 }

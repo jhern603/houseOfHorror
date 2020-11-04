@@ -3,7 +3,7 @@ import java.util.*;
 public class Room {
     private String roomName;
     private List<String> connectedRooms = new ArrayList<>();
-    private HashMap<String, String> itemsInRoom = new HashMap<>();
+    private Map<String, String> itemsInRoom = new HashMap<>();
 
     public Room() {
         this.roomName = "An exception has occurred!";
@@ -21,12 +21,11 @@ public class Room {
     }
 
     public void addItem(String name, String description) {
+        this.itemsInRoom.put("OK", null);
         this.itemsInRoom.put(name.toLowerCase(), description.toLowerCase());
-        System.out.println("Room.addItem: " + name + " added.");
     }
 
     public List<String> getConnectedRooms() {
-        Collections.sort(this.connectedRooms);
         return this.connectedRooms;
     }
 
