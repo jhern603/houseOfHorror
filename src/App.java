@@ -13,10 +13,17 @@
 
 import java.util.Arrays;
 
+/**
+ * This haunted house program was build for Florida International University's
+ * COP 2210 (Programming 1) class that extended for two different assignments.
+ * @author Jose Hernandez, Santiago Aday, Ernesto Alva, Julio Arroyo, Guilherme Cynammon, Sebastian Cubillos, Luis Loboff
+ * @version 1.0
+ * @since 2020-21-11
+ */
 public class App {
     
     /** 
-     * @param args
+     * @param args Command line arguments
      */
     public static void main(String[] args) {
         Game hauntedHouse = new Game();

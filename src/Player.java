@@ -27,7 +27,7 @@ public class Player {
 
     
     /** 
-     * @return String
+     * @return String returns the location of the player as a String
      */
     public String getLocation(){
         System.out.println("Player.getLocation:"+ currentRoom.getRoomName());
@@ -36,7 +36,7 @@ public class Player {
 
     
     /** 
-     * @return String
+     * @return String returns the player's name as a String
      */
     public String getName(){
         System.out.println("Player.getName: "+playerName);
@@ -45,7 +45,8 @@ public class Player {
 
     
     /** 
-     * @return String
+     * @return String returns the rooms that are connected to the room the player is currently in
+     * @see RoomActions.generateRoom
      */
     public String connectedRooms(){
         System.out.println("Player.connectedRooms:" + house.getConnections(currentRoom.getRoomName()));
@@ -54,8 +55,8 @@ public class Player {
 
     
     /** 
-     * @param item
-     * @return String
+     * @param item takes the item that the user is trying to pickup as a String
+     * @return String returns the name of the item as a String
      */
     public String pickupItem(String item){
         String returnStatus = "Something went wrong!";
@@ -75,8 +76,8 @@ public class Player {
 
     
     /** 
-     * @param toVisit
-     * @return String
+     * @param toVisit takes the room the user wants to visit as a String
+     * @return String returns a dialog informing the user if they successfully moved into a room or not
      */
     public String moveTo(String toVisit) {
         if (house.canMoveInto(currentRoom.getRoomName(), toVisit)) {
@@ -89,9 +90,9 @@ public class Player {
     }
 
     
-    /** 
-     * @param itemToInspect
-     * @return String
+    /**
+     * @param itemToInspect takes the item the user is trying to inspect as a String
+     * @return String returns the description of the item as a String
      */
     public String inspectItem(String itemToInspect) {
         for (String item : house.returnStringAsRoom(currentRoom.getRoomName()).getItemNames()) {
