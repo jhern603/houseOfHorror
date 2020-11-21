@@ -13,7 +13,7 @@
 import javax.swing.*;
 import java.util.*;
 
-public class Game { 
+public class Game {
 
     public void play() {
         String begin = input("Welcome to the house of horrors!\nAre you willing to enter?").toLowerCase();
@@ -25,10 +25,13 @@ public class Game {
 
             do {
                 map(player.getLocation());
-                String userInput = options("You are currently at the: " + player.getLocation().toUpperCase() + ".\nWhere would you like to go?", player.house.getConnectionsAsList(player.getLocation()).toArray()).toString();
+                String userInput = options(
+                        "You are currently at the: " + player.getLocation()
+                                + ".\nWhere would you like to go?",
+                        player.house.getConnectionsAsList(player.getLocation()).toArray()).toString();
 
                 output(player.moveTo(userInput));
-                
+
                 if (userInput.equals("stairs")) {
                     output("The rickety stairs collapse as you go up each step, leaving you unable to go back down.");
                 } else {
@@ -55,20 +58,39 @@ public class Game {
 
     }
 
+    
+    /** 
+     * @param msg
+     * @return String
+     */
     private static String input(String msg) {
         return JOptionPane.showInputDialog(null, msg, "Horrors of House", 1);
     }
 
+    
+    /** 
+     * @param msg
+     */
     private static void output(String msg) {
         JOptionPane.showMessageDialog(null, msg, "Horrors of House", 1);
     }
 
+    
+    /** 
+     * @param msg
+     * @param userOptions
+     * @return Object
+     */
     private static Object options(String msg, Object[] userOptions) {
-        int option = JOptionPane.showOptionDialog(null, msg, "Horrors of House", JOptionPane.YES_NO_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE, null, userOptions, userOptions[0]);
-        return userOptions[option];
+        String option = (String) JOptionPane.showInputDialog(null, msg, "Horrors of House",
+                JOptionPane.QUESTION_MESSAGE, null, userOptions, userOptions[0]);
+        return option;
     }
 
+    
+    /** 
+     * @param location
+     */
     // Use current locatino to pull the map for the user
     private static void map(String location) {
         HashMap<String, String> filePaths = new HashMap<>();
@@ -87,6 +109,5 @@ public class Game {
         ImageIcon mapLocation = new ImageIcon(filePaths.get(location));
         JOptionPane.showMessageDialog(null, "", null, JOptionPane.DEFAULT_OPTION, mapLocation);
     }
-
 
 }

@@ -32,19 +32,36 @@ public class Room {
         this.connectedRooms = Arrays.asList(connectedTo);
     }
 
+    
+    /** 
+     * @param name
+     * @param description
+     */
     public void addItem(String name, String description) {
         this.itemsInRoom.put("OK", null);
         this.itemsInRoom.put(name.toLowerCase(), description.toLowerCase());
     }
 
+    
+    /** 
+     * @return List<String>
+     */
     public List<String> getConnectedRooms() {
         return this.connectedRooms;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getRoomName() {
         return this.roomName;
     }
 
+    
+    /** 
+     * @return String[]
+     */
     public String[] getItemNames() {
         Set<String> itemsSet = this.itemsInRoom.keySet();
         String[] itemsArray = new String[itemsSet.size()];
@@ -54,6 +71,11 @@ public class Room {
         return itemsArray;
     }
 
+    
+    /** 
+     * @param key
+     * @return String
+     */
     public String getItemDesc(String key) {
         System.out.println("Room.getItemDesc:" + key + "'s Description returned");
         return this.itemsInRoom.get(key);

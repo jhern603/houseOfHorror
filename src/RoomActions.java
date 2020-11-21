@@ -14,7 +14,7 @@ import java.util.*;
 
 public class RoomActions {
         private ArrayList<Room> rooms = new ArrayList<>();
-        private final int AMOUNTROOMS = 13;
+        private final int AMOUNT_ROOMS = 13;
         private int counter;
 
         public RoomActions() {
@@ -27,32 +27,24 @@ public class RoomActions {
 
                 // Create room connections (also used for back tracking, which is currently
                 // disabled)
-                String[] connectedRoomsEntrance = { "stairs", "living room", "dining room" };
-                String[] connectedRoomsLR = { "bathroom" };
-                String[] connectedRoomsDining = { "kitchen" };
-                String[] connectedRoomsKitchen = { "pantry" };
-                String[] connectedRoomsUpStairs = { "master bedroom", "bedroom 2", "bedroom 1" };
-                String[] connectedRoomsBedroom = { "upstairs bathroom" };
-                String[] connectedRoomsUpStairsBath = { "bedroom 1", "bedroom 2" };
-                String[] connectedRoomsMasterBed = { "master bathroom" };
-                String[] connectedRoomsBathroom = { "living room" };
-                String[] connectedRoomsPantry = { "kitchen" };
-                String[] connectedRoomsMasterBath = { "master bedroom" };
+                String[] elevator = {"living room", "bathroom", "dining room", "kitchen", "pantry",
+                                "stairs", "bedroom 2", "upstairs bathroom", "master bedroom", "master bathroom", "bedroom 1"};
+
 
                 // Create rooms
                 myError = new Room();
-                entranceRoom = new Room("Entrance", connectedRoomsEntrance);
-                livingRoom = new Room("Living Room", connectedRoomsLR);
-                bathroom = new Room("bathroom");
-                diningRoom = new Room("Dining Room", connectedRoomsDining);
-                kitchen = new Room("Kitchen", connectedRoomsKitchen);
-                pantry = new Room("Pantry");
-                upStairs = new Room("Stairs", connectedRoomsUpStairs);
-                bed1 = new Room("Bedroom 1", connectedRoomsBedroom);
-                bed2 = new Room("Bedroom 2", connectedRoomsBedroom);
-                upstairsBath = new Room("Upstairs bathroom");
-                masterBed = new Room("Master Bedroom", connectedRoomsMasterBed);
-                masterBath = new Room("Master bathroom");
+                entranceRoom = new Room("Entrance", elevator);
+                livingRoom = new Room("Living Room", elevator);
+                bathroom = new Room("bathroom", elevator);
+                diningRoom = new Room("Dining Room", elevator);
+                kitchen = new Room("Kitchen", elevator);
+                pantry = new Room("Pantry", elevator);
+                upStairs = new Room("Stairs", elevator);
+                bed1 = new Room("Bedroom 1", elevator);
+                bed2 = new Room("Bedroom 2", elevator);
+                upstairsBath = new Room("Upstairs bathroom", elevator);
+                masterBed = new Room("Master Bedroom", elevator);
+                masterBath = new Room("Master bathroom", elevator);
 
                 // Add items to room
                 livingRoom.addItem("Chest", "Ghost escapes and scares you to death");
@@ -107,23 +99,56 @@ public class RoomActions {
                 System.out.println("RoomActions.generateRooms: Rooms generated");
         }
 
+        
+        /** 
+         * @return String
+         */
         public String getRoomList() {
-                String[] roomsArray = new String[AMOUNTROOMS];
+                String[] roomsArray = new String[AMOUNT_ROOMS];
                 for (int i = 0; i < rooms.size(); i++) {
                         roomsArray[i] = rooms.get(i).getRoomName();
                 }
                 return returnArrAsString(roomsArray);
         }
+        
+        
+        /** 
+         * @return String[]
+         */
+        public String[] getRoomListAsArr() {
+                String[] roomsArray = new String[AMOUNT_ROOMS];
+                for (int i = 0; i < rooms.size(); i++) {
+                        roomsArray[i] = rooms.get(i).getRoomName();
+                }
+                return roomsArray;
+        }
 
+        
+        /** 
+         * @param room
+         * @return String[]
+         */
         public String[] getAvailableItems(String room) {
                 room = room.toLowerCase();
                 return returnStringAsRoom(room).getItemNames();
         }
 
+        
+        /** 
+         * @param currentRoom
+         * @param item
+         * @return String
+         */
         public String getItemDesc(Room currentRoom, String item) {
                 return currentRoom.getItemDesc(item);
         }
 
+        
+        /** 
+         * @param currentRoom
+         * @param nextRoom
+         * @return boolean
+         */
         public boolean canMoveInto(String currentRoom, String nextRoom) {
                 currentRoom = currentRoom.toLowerCase();
                 nextRoom = nextRoom.toLowerCase();
@@ -138,14 +163,29 @@ public class RoomActions {
 
         }
 
+        
+        /** 
+         * @param currentRoom
+         * @return List<String>
+         */
         public List<String> getConnectionsAsList(String currentRoom) {
                 return returnStringAsRoom(currentRoom).getConnectedRooms();
         }
 
+        
+        /** 
+         * @param currentRoom
+         * @return String
+         */
         public String getConnections(String currentRoom) {
                 return returnObjAsString(returnStringAsRoom(currentRoom).getConnectedRooms());
         }
 
+        
+        /** 
+         * @param attemptedRoom
+         * @return Room
+         */
         public Room returnStringAsRoom(String attemptedRoom) {
                 attemptedRoom = attemptedRoom.toLowerCase();
                 Room room = rooms.get(0);
@@ -158,10 +198,20 @@ public class RoomActions {
                 return room;
         }
 
+        
+        /** 
+         * @param method
+         * @return String
+         */
         public String returnObjAsString(Object method) {
                 return method.toString().replace("[", "").replace("]", "");
         }
 
+        
+        /** 
+         * @param array
+         * @return String
+         */
         public String returnArrAsString(Object[] array) {
                 return Arrays.toString(array).replace("[", "").replace("]", "");
         }

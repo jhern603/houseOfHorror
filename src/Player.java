@@ -25,21 +25,38 @@ public class Player {
         System.out.println("Player: "+name+" created.");
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getLocation(){
         System.out.println("Player.getLocation:"+ currentRoom.getRoomName());
         return currentRoom.getRoomName();
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getName(){
         System.out.println("Player.getName: "+playerName);
         return playerName;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String connectedRooms(){
         System.out.println("Player.connectedRooms:" + house.getConnections(currentRoom.getRoomName()));
         return house.getConnections(currentRoom.getRoomName());
     }
 
+    
+    /** 
+     * @param item
+     * @return String
+     */
     public String pickupItem(String item){
         String returnStatus = "Something went wrong!";
         for(int i = 0; i < invContents.length; i++){
@@ -56,6 +73,11 @@ public class Player {
         return returnStatus;
     }
 
+    
+    /** 
+     * @param toVisit
+     * @return String
+     */
     public String moveTo(String toVisit) {
         if (house.canMoveInto(currentRoom.getRoomName(), toVisit)) {
             currentRoom = house.returnStringAsRoom(toVisit);
@@ -66,6 +88,11 @@ public class Player {
         return "You cannot visit that room from here!";
     }
 
+    
+    /** 
+     * @param itemToInspect
+     * @return String
+     */
     public String inspectItem(String itemToInspect) {
         for (String item : house.returnStringAsRoom(currentRoom.getRoomName()).getItemNames()) {
             if (item.equals(itemToInspect)) {

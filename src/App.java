@@ -11,7 +11,13 @@
 // or the derivative of the work of someone else.
 //********************************************************************************
 
+import java.util.Arrays;
+
 public class App {
+    
+    /** 
+     * @param args
+     */
     public static void main(String[] args) {
         Game hauntedHouse = new Game();
         hauntedHouse.play();
