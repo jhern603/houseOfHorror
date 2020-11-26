@@ -8,78 +8,108 @@
 // DATE: 04NOV20
 //
 // I hereby swear and affirm that this work is solely my own, and not the work
-// or the derivative of the work of someone else.
+// or the derivative of the work of someone lse, except as outlined in the 
+// assignment instructions.
 //********************************************************************************
 import javax.swing.*;
 import java.util.*;
 
 public class Game {
 
+    /**
+     * @apiNote This method is used to initialize and build the game
+     * @author Luis Loboff
+     */
+    
     public void play() {
         String begin = input("Welcome to the house of horrors!\nAre you willing to enter?").toLowerCase();
         if (begin.contains("y")) {
             String playerName = input("What is your name?");
             Player player = new Player(playerName);
-
+    
             output("You enter a suspcious looking house and find that the door shuts behind you.\n You try to open the door but it looks like it locked itself. Your only option is to traverse the house and find your way out.");
-
+    
             do {
-                map(player.getLocation());
                 String userInput = options(
-                        "You are currently at the: " + player.getLocation()
-                                + ".\nWhere would you like to go?",
+                        "You are currently at the: " + player.getLocation() + ".\nWhere would you like to go?",
                         player.house.getConnectionsAsList(player.getLocation()).toArray()).toString();
-
-                output(player.moveTo(userInput));
-
-                if (userInput.equals("stairs")) {
-                    output("The rickety stairs collapse as you go up each step, leaving you unable to go back down.");
-                } else {
-                    output("You enter the room. The door slams shut door behind you.\n You try to open the door but doesn't budge.");
-                }
-
-                if (player.house.getAvailableItems(player.getLocation()).length != 0) {
-                    String itemChoice = options("You have found the following items in the room (Click to inspect): ",
-                            player.house.getAvailableItems(player.getLocation())).toString();
-                    if (!itemChoice.equals("OK")) {
-                        output(player.inspectItem(itemChoice));
-                        output(player.pickupItem(itemChoice));
-                        System.exit(1);
+    
+                if (userInput.equals("attic") && player.getInvContents().contains("key")) {
+                    output(player.moveTo(userInput));
+                    map(player.getLocation());
+                    if (player.house.getAvailableItems(player.getLocation()).length != 0) {
+                        String itemChoice = options(
+                                "You have found the following items in the room (Click to inspect): ",
+                                player.house.getAvailableItems(player.getLocation())).toString();
+                        if (!itemChoice.equals("OK")) {
+                            output(player.inspectItem(itemChoice));
+                            output(player.pickupItem(itemChoice));
+                            if (!player.openInventory().isEmpty())
+                                output("You currently have: " + player.openInventory());
+                        }
                     }
+                } else if (userInput.equals("outdoors") && player.getInvContents().contains("house key")) {
+                    output("You finally have espaced this terrible house");
+                    System.exit(1);
+    
+                } else if (!userInput.equals("attic") && !userInput.equals("outdoors")) {
+                    output(player.moveTo(userInput));
+                    map(player.getLocation());
+                    if (player.house.getAvailableItems(player.getLocation()).length != 0) {
+                        String itemChoice = options(
+                                "You have found the following items in the room (Click to inspect): ",
+                                player.house.getAvailableItems(player.getLocation())).toString();
+                        if (itemChoice.equalsIgnoreCase("chest") || itemChoice.equalsIgnoreCase("shower")
+                                || itemChoice.equalsIgnoreCase("cabinet") || itemChoice.equalsIgnoreCase("lever")) {
+                            output(player.inspectItem(itemChoice));
+                            System.exit(1);
+                        } else if (!itemChoice.equals("OK")) {
+                            output(player.inspectItem(itemChoice));
+                            output(player.pickupItem(itemChoice));
+                            if (!player.openInventory().isEmpty())
+                                output("You currently have: " + player.openInventory());
+                        }
+                    }
+                } else {
+                    output("This door is locked. Looks like you need a key to get through.");
                 }
-
+    
             } while (true);
         } else
-
+    
         {
             output("That's alright, maybe next time.");
             System.exit(1);
         }
-
-    }
-
     
-    /** 
-     * @param msg
-     * @return String
+    }
+    
+    /**
+     * @param msg will take A String input from play() class
+     * @return String Creates a JOptionPane window that takes User input and stores
+     *         it
+     * @author Jose Hernandez
      */
     private static String input(String msg) {
         return JOptionPane.showInputDialog(null, msg, "Horrors of House", 1);
     }
 
-    
-    /** 
-     * @param msg
+    /**
+     * @param msg Creates a JOptionPane window that displays a message
+     * @author Jose Hernandez
      */
     private static void output(String msg) {
         JOptionPane.showMessageDialog(null, msg, "Horrors of House", 1);
     }
 
-    
-    /** 
-     * @param msg
-     * @param userOptions
-     * @return Object
+    /**
+     * @param msg         Will take a String input of the message being returned by
+     *                    the UserOption
+     * @param userOptions Will take an Object input that reflects what the user
+     *                    chose at any given time
+     * @return Object Creates a JOptionPane window that displays a drop down
+     *         selection system
+     * @author Jose Hernandez
      */
     private static Object options(String msg, Object[] userOptions) {
         String option = (String) JOptionPane.showInputDialog(null, msg, "Horrors of House",
@@ -87,27 +117,25 @@ public class Game {
         return option;
     }
 
-    
-    /** 
-     * @param location
+    /**
+     * @param location Displays a map for each room
+     * @author Jose Hernandez
      */
-    // Use current locatino to pull the map for the user
     private static void map(String location) {
         HashMap<String, String> filePaths = new HashMap<>();
-        filePaths.put("Entrance", "src\\media\\img\\map\\1entrance.png");
-        filePaths.put("Living Room", "src\\media\\img\\map\\1lr.png");
-        filePaths.put("bathroom", "src\\media\\img\\map\\1bathroom.png");
-        filePaths.put("Dining Room", "src\\media\\img\\map\\1dining.png");
-        filePaths.put("Kitchen", "src\\media\\img\\map\\1kitchen.png");
-        filePaths.put("Pantry", "src\\media\\img\\map\\1pantry.png");
-        filePaths.put("Stairs", "src\\media\\img\\map\\2stairs.png");
-        filePaths.put("Bedroom 1", "src\\media\\img\\map\\2bedroom1.png");
-        filePaths.put("Bedroom 2", "src\\media\\img\\map\\2bedroom2.png");
-        filePaths.put("Upstairs bathroom", "src\\media\\img\\map\\2bathroom.png");
-        filePaths.put("Master Bedroom", "src\\media\\img\\map\\2masterbed.png");
-        filePaths.put("Master bathroom", "src\\media\\img\\map\\2masterbath.png");
+        filePaths.put("Entrance", "src\\media\\img\\map\\FrontDoor.png");
+        filePaths.put("Living Room", "src\\media\\img\\map\\LivingRoom.png");
+        filePaths.put("bathroom", "src\\media\\img\\map\\MasterBathroom.png");
+        filePaths.put("Dining Room", "src\\media\\img\\map\\DiningRoom.png");
+        filePaths.put("Kitchen", "src\\media\\img\\map\\Kitchen.png");
+        filePaths.put("Pantry", "src\\media\\img\\map\\Pantry.png");
+        filePaths.put("Bedroom 1", "src\\media\\img\\map\\Bedroom1.png");
+        filePaths.put("Bedroom 2", "src\\media\\img\\map\\Bedroom2.png");
+        filePaths.put("Upstairs bathroom", "src\\media\\img\\map\\MasterBathroom.png");
+        filePaths.put("Master Bedroom", "src\\media\\img\\map\\MasterBedroom.png");
+        filePaths.put("Master bathroom", "src\\media\\img\\map\\MasterBathroom.png");
         ImageIcon mapLocation = new ImageIcon(filePaths.get(location));
-        JOptionPane.showMessageDialog(null, "", null, JOptionPane.DEFAULT_OPTION, mapLocation);
+        JOptionPane.showMessageDialog(null, "", "Current Location", JOptionPane.DEFAULT_OPTION, mapLocation);
     }
 
 }

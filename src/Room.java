@@ -8,7 +8,8 @@
 // DATE: 04NOV20
 //
 // I hereby swear and affirm that this work is solely my own, and not the work
-// or the derivative of the work of someone else.
+// or the derivative of the work of someone lse, except as outlined in the 
+// assignment instructions.
 //********************************************************************************
 import java.util.*;
 
@@ -33,9 +34,12 @@ public class Room {
     }
 
     
-    /** 
-     * @param name
-     * @param description
+    /**
+     * @param name        Will take a String input of an item name and adds it to a
+     *                    room
+     * @param description Will take a String input of an item description and adds
+     *                    it to a room
+     * @author Luis Loboff
      */
     public void addItem(String name, String description) {
         this.itemsInRoom.put("OK", null);
@@ -43,24 +47,27 @@ public class Room {
     }
 
     
-    /** 
-     * @return List<String>
+    /**
+     * @return List<String> returns connected rooms
+     * @author Luis Loboff
      */
     public List<String> getConnectedRooms() {
         return this.connectedRooms;
     }
 
     
-    /** 
-     * @return String
+    /**
+     * @return String returns the room name
+     * @author Guilherme Cynammon
      */
     public String getRoomName() {
         return this.roomName;
     }
 
     
-    /** 
-     * @return String[]
+    /**
+     * @return String[] returns the iterms in the room
+     * @author Sebastian Cubillos
      */
     public String[] getItemNames() {
         Set<String> itemsSet = this.itemsInRoom.keySet();
@@ -72,9 +79,10 @@ public class Room {
     }
 
     
-    /** 
-     * @param key
-     * @return String
+    /**
+     * @param key Will take a String input of an item
+     * @return String returns description of item
+     * @author Santiago Aday
      */
     public String getItemDesc(String key) {
         System.out.println("Room.getItemDesc:" + key + "'s Description returned");

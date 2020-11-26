@@ -8,44 +8,57 @@
 // DATE: 04NOV20
 //
 // I hereby swear and affirm that this work is solely my own, and not the work
-// or the derivative of the work of someone else.
+// or the derivative of the work of someone lse, except as outlined in the 
+// assignment instructions.
 //********************************************************************************
 import java.util.*;
 
 public class RoomActions {
         private ArrayList<Room> rooms = new ArrayList<>();
-        private final int AMOUNT_ROOMS = 13;
+        private final int AMOUNT_ROOMS = 19;
         private int counter;
 
         public RoomActions() {
                 generateRooms();
         }
 
+        /**
+         * @apiNote Generates all the rooms as well as adds items into each room
+         * @author Ernesto Alva
+         */
         public void generateRooms() {
                 Room myError, entranceRoom, livingRoom, bathroom, diningRoom, kitchen, pantry, upStairs, bed2,
-                                upstairsBath, masterBed, masterBath, bed1;
+                                upstairsBath, masterBed, masterBath, bed1, storageRoom, boilerRoom, attic, basement, outdoors, elevator;
 
                 // Create room connections (also used for back tracking, which is currently
                 // disabled)
-                String[] elevator = {"living room", "bathroom", "dining room", "kitchen", "pantry",
-                                "stairs", "bedroom 2", "upstairs bathroom", "master bedroom", "master bathroom", "bedroom 1"};
-
+                String[] lift = { "entrance", "living room", "bathroom", "dining room", "kitchen", "pantry", "stairs",
+                                "bedroom 2", "upstairs bathroom", "master bedroom", "master bathroom", "bedroom 1",
+                                "attic", "basement" };
+                String[] basementConnect = { "storage room", "boiler room", "entrance" };
+                String[] entrance = {"elevator", "outdoors"};
 
                 // Create rooms
                 myError = new Room();
-                entranceRoom = new Room("Entrance", elevator);
-                livingRoom = new Room("Living Room", elevator);
-                bathroom = new Room("bathroom", elevator);
-                diningRoom = new Room("Dining Room", elevator);
-                kitchen = new Room("Kitchen", elevator);
-                pantry = new Room("Pantry", elevator);
-                upStairs = new Room("Stairs", elevator);
-                bed1 = new Room("Bedroom 1", elevator);
-                bed2 = new Room("Bedroom 2", elevator);
-                upstairsBath = new Room("Upstairs bathroom", elevator);
-                masterBed = new Room("Master Bedroom", elevator);
-                masterBath = new Room("Master bathroom", elevator);
-
+                outdoors = new Room("You have escaped this crappy house", entrance);
+                entranceRoom = new Room("Entrance", entrance);
+                elevator = new Room("elevator", lift);
+                livingRoom = new Room("Living Room", lift);
+                bathroom = new Room("bathroom", lift);
+                diningRoom = new Room("Dining Room", lift);
+                kitchen = new Room("Kitchen", lift);
+                pantry = new Room("Pantry", lift);
+                upStairs = new Room("Stairs", lift);
+                bed1 = new Room("Bedroom 1", lift);
+                bed2 = new Room("Bedroom 2", lift);
+                upstairsBath = new Room("Upstairs bathroom", lift);
+                masterBed = new Room("Master Bedroom", lift);
+                masterBath = new Room("Master bathroom", lift);
+                attic = new Room("Attic", lift);
+                storageRoom = new Room("Storage Room", basementConnect);
+                boilerRoom = new Room("Boiler Room", basementConnect);
+                basement = new Room("Basement", basementConnect);
+                
                 // Add items to room
                 livingRoom.addItem("Chest", "Ghost escapes and scares you to death");
 
@@ -80,6 +93,11 @@ public class RoomActions {
                 masterBath.addItem("Mirror", "you see a blood face looking back at you");
                 masterBath.addItem("Shower",
                                 "the bathroom suddenly steams up and you feel fingers touching the back of your neck");
+                attic.addItem("house key", "You have found a second, slightly different, key");
+                storageRoom.addItem("key", "You have found a glistening key. You wonder what it's for.");
+                
+                boilerRoom.addItem("Lever",
+                                "You pull on the lever and the room fills up with steam, suffocating you to death.");
 
                 // Add rooms to collection
                 rooms.add(myError);
@@ -95,13 +113,20 @@ public class RoomActions {
                 rooms.add(masterBed);
                 rooms.add(masterBath);
                 rooms.add(bed1);
+                rooms.add(attic);
+                rooms.add(basement);
+                rooms.add(storageRoom);
+                rooms.add(boilerRoom);
+                rooms.add(outdoors);
+                rooms.add(elevator);
 
                 System.out.println("RoomActions.generateRooms: Rooms generated");
         }
 
         
-        /** 
-         * @return String
+        /**
+         * @return String returns room list as a String
+         * @author Ernesto Alva
          */
         public String getRoomList() {
                 String[] roomsArray = new String[AMOUNT_ROOMS];
@@ -112,8 +137,9 @@ public class RoomActions {
         }
         
         
-        /** 
-         * @return String[]
+        /**
+         * @return String[] Returns room list as an array
+         * @author Ernesto Alva
          */
         public String[] getRoomListAsArr() {
                 String[] roomsArray = new String[AMOUNT_ROOMS];
@@ -124,9 +150,10 @@ public class RoomActions {
         }
 
         
-        /** 
-         * @param room
-         * @return String[]
+        /**
+         * @param room Will take a String input of a room
+         * @return String[] returns items in a particular room
+         * @author Julio Arroyo
          */
         public String[] getAvailableItems(String room) {
                 room = room.toLowerCase();
@@ -134,20 +161,23 @@ public class RoomActions {
         }
 
         
-        /** 
-         * @param currentRoom
-         * @param item
-         * @return String
+        /**
+         * @param currentRoom Will take an Object input of the current room
+         * @param item        Will take a String input of an item
+         * @return String returns item descriptions in a particular room
+         * @author Julio Arroyo
          */
         public String getItemDesc(Room currentRoom, String item) {
                 return currentRoom.getItemDesc(item);
         }
 
         
-        /** 
-         * @param currentRoom
-         * @param nextRoom
-         * @return boolean
+        /**
+         * @param currentRoom Will take a String input of the current room
+         * @param nextRoom    will take a String input of the next room
+         * @return boolean returns a status of if you can travel to a particular room
+         *         from the current room
+         * @author Ernesto Alva
          */
         public boolean canMoveInto(String currentRoom, String nextRoom) {
                 currentRoom = currentRoom.toLowerCase();
@@ -164,27 +194,30 @@ public class RoomActions {
         }
 
         
-        /** 
-         * @param currentRoom
-         * @return List<String>
+        /**
+         * @param currentRoom Will take a String input of the current room
+         * @return List<String> returns the connected rooms to the current room
+         * @author Julio Arroyo
          */
         public List<String> getConnectionsAsList(String currentRoom) {
                 return returnStringAsRoom(currentRoom).getConnectedRooms();
         }
 
         
-        /** 
-         * @param currentRoom
-         * @return String
+        /**
+         * @param currentRoom Will take a String input of the current room
+         * @return String Returns the connected room to the current room
+         * @author Sebastian Cubillos
          */
         public String getConnections(String currentRoom) {
                 return returnObjAsString(returnStringAsRoom(currentRoom).getConnectedRooms());
         }
 
         
-        /** 
-         * @param attemptedRoom
-         * @return Room
+        /**
+         * @param attemptedRoom Will take a String input of an attempted room
+         * @return Room returns the room as a string
+         * @author Sebastian Cubillos
          */
         public Room returnStringAsRoom(String attemptedRoom) {
                 attemptedRoom = attemptedRoom.toLowerCase();
@@ -199,18 +232,20 @@ public class RoomActions {
         }
 
         
-        /** 
-         * @param method
-         * @return String
+        /**
+         * @param method Will take an Object input of a method
+         * @return String Returns an object as a String
+         * @author Jose Hernandez
          */
         public String returnObjAsString(Object method) {
                 return method.toString().replace("[", "").replace("]", "");
         }
 
         
-        /** 
-         * @param array
-         * @return String
+        /**
+         * @param array will take an Object array input of an array
+         * @return String Returns an array as a String
+         * @author Jose Hernandez
          */
         public String returnArrAsString(Object[] array) {
                 return Arrays.toString(array).replace("[", "").replace("]", "");

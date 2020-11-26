@@ -8,10 +8,9 @@
 // DATE: 04NOV20
 //
 // I hereby swear and affirm that this work is solely my own, and not the work
-// or the derivative of the work of someone else.
+// or the derivative of the work of someone lse, except as outlined in the 
+// assignment instructions.
 //********************************************************************************
-
-import java.util.Arrays;
 
 /**
  * This haunted house program was build for Florida International University's
@@ -22,8 +21,10 @@ import java.util.Arrays;
  */
 public class App {
     
-    /** 
-     * @param args Command line arguments
+    /**
+     * @param args Command line arguments Initializes the Game Class and starts the
+     *             application
+     * @author Guilherme Cynammon
      */
     public static void main(String[] args) {
         Game hauntedHouse = new Game();
