@@ -54,7 +54,10 @@ public class Game {
     
                 } else if (!userInput.equals("attic") && !userInput.equals("outdoors")) {
                     output(player.moveTo(userInput));
-                    map(player.getLocation());
+                    
+                    if(!userInput.equals("elevator"))
+                        map(player.getLocation());
+                    
                     if (player.house.getAvailableItems(player.getLocation()).length != 0) {
                         String itemChoice = options(
                                 "You have found the following items in the room (Click to inspect): ",
@@ -123,17 +126,17 @@ public class Game {
      */
     private static void map(String location) {
         HashMap<String, String> filePaths = new HashMap<>();
-        filePaths.put("Entrance", "src\\media\\img\\map\\FrontDoor.png");
-        filePaths.put("Living Room", "src\\media\\img\\map\\LivingRoom.png");
-        filePaths.put("bathroom", "src\\media\\img\\map\\MasterBathroom.png");
-        filePaths.put("Dining Room", "src\\media\\img\\map\\DiningRoom.png");
-        filePaths.put("Kitchen", "src\\media\\img\\map\\Kitchen.png");
-        filePaths.put("Pantry", "src\\media\\img\\map\\Pantry.png");
-        filePaths.put("Bedroom 1", "src\\media\\img\\map\\Bedroom1.png");
-        filePaths.put("Bedroom 2", "src\\media\\img\\map\\Bedroom2.png");
-        filePaths.put("Upstairs bathroom", "src\\media\\img\\map\\MasterBathroom.png");
-        filePaths.put("Master Bedroom", "src\\media\\img\\map\\MasterBedroom.png");
-        filePaths.put("Master bathroom", "src\\media\\img\\map\\MasterBathroom.png");
+        filePaths.put("Entrance", "src\\media\\img\\map\\FrontDoor.jpg");
+        filePaths.put("Living Room", "src\\media\\img\\map\\LivingRoom.jpg");
+        filePaths.put("bathroom", "src\\media\\img\\map\\Bathroom1.jpg");
+        filePaths.put("Dining Room", "src\\media\\img\\map\\DiningRoom.jpg");
+        filePaths.put("Kitchen", "src\\media\\img\\map\\Kitchen.jpg");
+        filePaths.put("Pantry", "src\\media\\img\\map\\Pantry.jpg");
+        filePaths.put("Bedroom 1", "src\\media\\img\\map\\Bedroom1.jpg");
+        filePaths.put("Bedroom 2", "src\\media\\img\\map\\Bedroom2.jpg");
+        filePaths.put("Upstairs bathroom", "src\\media\\img\\map\\Bathroom2.jpg");
+        filePaths.put("Master Bedroom", "src\\media\\img\\map\\MasterBedroom.jpg");
+        filePaths.put("Master bathroom", "src\\media\\img\\map\\MasterBathroom.jpg");
         ImageIcon mapLocation = new ImageIcon(filePaths.get(location));
         JOptionPane.showMessageDialog(null, "", "Current Location", JOptionPane.DEFAULT_OPTION, mapLocation);
     }
