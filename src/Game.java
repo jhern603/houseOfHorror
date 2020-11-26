@@ -54,7 +54,7 @@ public class Game {
     
                 } else if (!userInput.equals("attic") && !userInput.equals("outdoors")) {
                     output(player.moveTo(userInput));
-                    
+
                     if(!userInput.equals("elevator"))
                         map(player.getLocation());
                     
@@ -127,6 +127,9 @@ public class Game {
     private static void map(String location) {
         HashMap<String, String> filePaths = new HashMap<>();
         filePaths.put("Entrance", "src\\media\\img\\map\\FrontDoor.jpg");
+        filePaths.put("Basement", "src\\media\\img\\map\\Basement.jpg");
+        filePaths.put("Storage Room", "src\\media\\img\\map\\Basement.jpg");
+        filePaths.put("Boiler Room", "src\\media\\img\\map\\Basement.jpg");
         filePaths.put("Living Room", "src\\media\\img\\map\\LivingRoom.jpg");
         filePaths.put("bathroom", "src\\media\\img\\map\\Bathroom1.jpg");
         filePaths.put("Dining Room", "src\\media\\img\\map\\DiningRoom.jpg");
